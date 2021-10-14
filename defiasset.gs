@@ -25,8 +25,8 @@
   1.0.0   Creation DEFI_NETWORTH ScriptRunTime Function that gets DEFI NETWORTH based on list of addresses
   1.0.1   PROTOCOLS returns the list of protocols available on the Zapper api
   1.0.2   CRYPTODEFI returns the list assets by defi protocol  
-  1.0.3   CRYPTODEFIASSET returns the balance by symbol/ticker given a defi protocol into Google spreadsheets.  
-  1.0.3   CRYPTODEFIVALUE returns the USD amont lended by symbol/ticker given a defi protocol into Google spreadsheets.   
+  1.0.3   CRYPTODEFI_BALANCE returns the balance by symbol/ticker given a defi protocol into Google spreadsheets.  
+  1.0.3   CRYPTODEFI_BALANCEUSD returns the USD amont lended by symbol/ticker given a defi protocol into Google spreadsheets.   
 *====================================================================================================================================*/
 //CRYPTOTOOLS PRIVATE KEY 
 //For faster & greater access, please provide your private Key in the brackets
@@ -68,7 +68,7 @@ function DEFI_NETWORTH() {
   try{var dict_protocols= []; 
     for (var i=0;i<protocols_defi[0].length;i++) {
       if (protocols_defi[0][i]!=""){
-      dict_protocols.push(protocols_defi[0][i].replace(" ", "6z6"));
+      dict_protocols.push(protocols_defi[0][i].replace(" ", "6z6").toLowerCase());
       }
     }
   protocols_defi = [].concat(dict_protocols).join("%2C");}
@@ -119,7 +119,7 @@ function DEFI_NETWORTH() {
 async function CRYPTODEFI(address, protocols) {
   try{
   address_defi = [].concat(address).join("%2C").replace("-", "").replace("/", ""); 
-  protocols_defi = [].concat(protocols.replace(" ", "6z6")).join("%2C");
+  protocols_defi = [].concat(protocols.toLowerCase().replace(" ", "6z6")).join("%2C");
   
   
   //Connection to the API endpoints 
@@ -144,12 +144,12 @@ async function CRYPTODEFI(address, protocols) {
     return err;
   }
 }
-/**CRYPTODEFIASSET 
+/**CRYPTODEFI_BALANCE
  * Returns the staked/lended balance by symbol/ticker given a defi protocol into Google spreadsheets. 
  * By default, data gets transformed into a array/number. 
  * For example:
  *
- *   =CRYPTODEFIASSET("0x98d946dc96e49a5bf9fdfb6bafbbfd02f746f18c","CAKE","binance-smart-chain autofarm")           
+ *   =CRYPTODEFI_BALANCE("0x98d946dc96e49a5bf9fdfb6bafbbfd02f746f18c","CAKE","binance-smart-chain autofarm")           
  * 
  * @param {address}                        Ethereum/bsc/polygon/fantom smart chain address
  * @param {ticker}                         Ticker/Symbol
@@ -159,10 +159,10 @@ async function CRYPTODEFI(address, protocols) {
  *
  * @return a dimensional array containing the balance amount staked, lend etc...
  **/
-async function CRYPTODEFIASSET(address,ticker, protocols) {
+async function CRYPTODEFI_BALANCE(address,ticker, protocols) {
   try{
   address_defi = [].concat(address).join("%2C").replace("-", "").replace("/", ""); 
-  protocols_defi = [].concat(protocols.replace(" ", "6z6")).join("%2C");
+  protocols_defi = [].concat(protocols.toLowerCase().replace(" ", "6z6")).join("%2C");
   ticker= ticker.toUpperCase();
   
   //Cache
@@ -206,12 +206,12 @@ async function CRYPTODEFIASSET(address,ticker, protocols) {
     return err;
   }
 }
-/**CRYPTODEFIVALUE 
+/**CRYPTODEFI_BALANCEUSD
  * Returns the staked/lended USD value by symbol/ticker given a defi protocol into Google spreadsheets. 
  * By default, data gets transformed into a array/number. 
  * For example:
  *
- *   =CRYPTODEFIVALUE("0x98d946dc96e49a5bf9fdfb6bafbbfd02f746f18c","CAKE","binance-smart-chain autofarm")           
+ *   =CRYPTODEFI_BALANCEUSD("0x98d946dc96e49a5bf9fdfb6bafbbfd02f746f18c","CAKE","binance-smart-chain autofarm")           
  * 
  * @param {address}                        Ethereum/bsc/polygon/fantom smart chain address
  * @param {ticker}                         Ticker/Symbol
@@ -221,10 +221,10 @@ async function CRYPTODEFIASSET(address,ticker, protocols) {
  *
  * @return a dimensional array containing the USD amount staked, lend etc...
  **/
-async function CRYPTODEFIVALUE(address,ticker, protocols) {
+async function CRYPTODEFI_BALANCEUSD(address,ticker, protocols) {
   try{
   address_defi = [].concat(address).join("%2C").replace("-", "").replace("/", ""); 
-  protocols_defi = [].concat(protocols.replace(" ", "6z6")).join("%2C");
+  protocols_defi = [].concat(protocols.replace(" ", "6z6").toLowerCase()).join("%2C");
   ticker= ticker.toUpperCase();
   
   //Cache
