@@ -25,7 +25,8 @@
   1.0.0   Creation DEFI_NETWORTH ScriptRunTime Function that gets DEFI NETWORTH based on list of addresses
   1.0.1   PROTOCOLS returns the list of protocols available on the Zapper api
   1.0.2   CRYPTODEFI returns the list assets by defi protocol  
-  1.0.3   CRYPTODEFIASSET returns the balance by symbol/ticker given a defi protocol into Google spreadsheets.   
+  1.0.3   CRYPTODEFIASSET returns the balance by symbol/ticker given a defi protocol into Google spreadsheets.  
+  1.0.3   CRYPTODEFIVALUE returns the USD amont lended by symbol/ticker given a defi protocol into Google spreadsheets.   
 *====================================================================================================================================*/
 //CRYPTOTOOLS PRIVATE KEY 
 //For faster & greater access, please provide your private Key in the brackets
@@ -102,7 +103,7 @@ function DEFI_NETWORTH() {
  
 }
 /**CRYPTODEFI 
- * Returns the list assets by defi protocol into Google spreadsheets. 
+ * Returns the list assets lended, staked... by defi protocol into Google spreadsheets. 
  * By default, data gets transformed into a array/number. 
  * For example:
  *
@@ -113,7 +114,7 @@ function DEFI_NETWORTH() {
  * @param {parseOptions}                   an optional fixed cell for automatic refresh of the data
  * @customfunction
  *
- * @return a dimensional array containing the prices
+ * @return a dimensional array containing the list of assets staked, lended with price, value, balance etc...
  **/
 async function CRYPTODEFI(address, protocols) {
   try{
@@ -144,11 +145,11 @@ async function CRYPTODEFI(address, protocols) {
   }
 }
 /**CRYPTODEFIASSET 
- * Returns the balance by symbol/ticker given a defi protocol into Google spreadsheets. 
+ * Returns the staked/lended balance by symbol/ticker given a defi protocol into Google spreadsheets. 
  * By default, data gets transformed into a array/number. 
  * For example:
  *
- *   =CRYPTODEFI("0x98d946dc96e49a5bf9fdfb6bafbbfd02f746f18c","CAKE","binance-smart-chain autofarm")           
+ *   =CRYPTODEFIASSET("0x98d946dc96e49a5bf9fdfb6bafbbfd02f746f18c","CAKE","binance-smart-chain autofarm")           
  * 
  * @param {address}                        Ethereum/bsc/polygon/fantom smart chain address
  * @param {ticker}                         Ticker/Symbol
@@ -156,7 +157,7 @@ async function CRYPTODEFI(address, protocols) {
  * @param {parseOptions}                   an optional fixed cell for automatic refresh of the data
  * @customfunction
  *
- * @return a dimensional array containing the prices
+ * @return a dimensional array containing the balance amount staked, lend etc...
  **/
 async function CRYPTODEFIASSET(address,ticker, protocols) {
   try{
@@ -205,7 +206,68 @@ async function CRYPTODEFIASSET(address,ticker, protocols) {
     return err;
   }
 }
+/**CRYPTODEFIVALUE 
+ * Returns the staked/lended USD value by symbol/ticker given a defi protocol into Google spreadsheets. 
+ * By default, data gets transformed into a array/number. 
+ * For example:
+ *
+ *   =CRYPTODEFIVALUE("0x98d946dc96e49a5bf9fdfb6bafbbfd02f746f18c","CAKE","binance-smart-chain autofarm")           
+ * 
+ * @param {address}                        Ethereum/bsc/polygon/fantom smart chain address
+ * @param {ticker}                         Ticker/Symbol
+ * @param {protocol}                       from the list of protocols available in the protocol function
+ * @param {parseOptions}                   an optional fixed cell for automatic refresh of the data
+ * @customfunction
+ *
+ * @return a dimensional array containing the USD amount staked, lend etc...
+ **/
+async function CRYPTODEFIVALUE(address,ticker, protocols) {
+  try{
+  address_defi = [].concat(address).join("%2C").replace("-", "").replace("/", ""); 
+  protocols_defi = [].concat(protocols.replace(" ", "6z6")).join("%2C");
+  ticker= ticker.toUpperCase();
+  
+  //Cache
+  id_cache=Utilities.base64Encode( Utilities.computeDigest(Utilities.DigestAlgorithm.MD5, address_defi+ticker+protocols_defi+"CRYPTODEFIVALUE"));
+  var cache = CacheService.getScriptCache();
+  var cached = cache.get(id_cache);
+  if (cached != null) {
+    result=cached.split(',');
+    return result.map(function(n) { return n && ("" || Number(n))}); 
+    }    
 
+  //Connection to the API endpoints 
+  var GSUUID = encodeURIComponent(Session.getTemporaryActiveUserKey());
+  GSUUID= GSUUID.replace(/%2f/gi, 'hello');
+  var userProperties = PropertiesService.getUserProperties();
+  var KEYID = userProperties.getProperty("KEYID") || GSUUID;
+
+  private_path="http://api.charmantadvisory.com";
+  http_options ={'headers':{'apikey':KEYID}};
+  
+  if (cryptotools_api_key != "") {
+    private_path="https://privateapi.charmantadvisory.com";
+    http_options = {'headers':{'apikey':cryptotools_api_key}};
+  }
+  url="/DEFIFORMULA/"+address_defi +"/"+protocols_defi+"/"+KEYID;
+  
+  // Calling the API and retrieving the data
+  var res = UrlFetchApp.fetch(private_path+url, http_options);
+  var content = JSON.parse(res.getContentText());
+  
+  var dict = []; 
+  for (var i=0;i<content.length;i++) {
+    if (content[i]['SYMBOL'].toUpperCase()== ticker){
+    dict.push(parseFloat(content[i]['BALANCE_USD']));
+    }
+  }
+  cache.put(id_cache,dict,expirationInSeconds_);
+  return dict;}
+  
+  catch(err){
+    return err;
+  }
+}
  /**PROTOCOLS
  * Returns the list of protocols available on the Zapper api,
  *
