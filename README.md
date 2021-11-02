@@ -17,14 +17,14 @@ Google Script that returns list of all assets (tokens, pools, nft, claimable etc
 ![CRYPTODEFI](https://github.com/Eloise1988/DEFIASSETS/blob/main/GIF/CRYPTODEFI.gif)
 
 ### GET ASSET QTY BY PROTOCOL & SYMBOL:
-=CRYPTODEFIASSET("Holder Address","Symbol","Protocol")
+=CRYPTODEFI_BALANCE("Holder Address","Symbol","Protocol")
 ##
-![CRYPTODEFIASSET](https://github.com/Eloise1988/DEFIASSETS/blob/main/GIF/CRYPTODEFIASSET.gif)
+![CRYPTODEFI_BALANCE](https://github.com/Eloise1988/DEFIASSETS/blob/main/GIF/CRYPTODEFI_BALANCE.gif)
 
 ### GET $ VALUE BY PROTOCOL & SYMBOL:
-=CRYPTODEFIVAUE("Holder Address","Symbol","Protocol")
+=CRYPTODEFI_BALANCEUSD("Holder Address","Symbol","Protocol")
 ##
-![CRYPTODEFIVALUE](https://github.com/Eloise1988/DEFIASSETS/blob/main/GIF/CRYPTODEFIVALUE.gif)
+![CRYPTODEFI_BALANCEUSD](https://github.com/Eloise1988/DEFIASSETS/blob/main/GIF/CRYPTODEFI_BALANCEUSD.gif)
 
 ### GET LIST OF PROTOCOLS:
 =PROTOCOLS()
