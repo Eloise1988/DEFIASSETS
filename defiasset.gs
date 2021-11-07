@@ -68,7 +68,7 @@ function DEFI_NETWORTH() {
   
   //Loading List of optional protocols in cells C6:G6
   protocols_defi=sheet.getRange(6,3,1,5).getValues();
-  Logger.log(protocols_defi)
+  
   try{var dict_protocols= []; 
     for (var i=0;i<protocols_defi[0].length;i++) {
       if (protocols_defi[0][i]!=""){
@@ -125,6 +125,15 @@ async function CRYPTODEFI(address, protocols) {
   address_defi = [].concat(address).join("%2C").replace("-", "").replace("/", ""); 
   protocols_defi = [].concat(protocols.toLowerCase().replace(" ", "6z6")).join("%2C");
   
+  id_cache=Utilities.base64Encode( Utilities.computeDigest(Utilities.DigestAlgorithm.MD5,address_defi+protocols_defi+'cryptodefi'));
+  
+  var cache = CacheService.getScriptCache();
+  var cached = cache.get(id_cache);
+  if (cached != null) {
+    result=JSON.parse(cached);
+    return result; 
+  }
+
   
   //Connection to the API endpoints 
   var GSUUID = encodeURIComponent(Session.getTemporaryActiveUserKey());
@@ -142,8 +151,23 @@ async function CRYPTODEFI(address, protocols) {
   url="/DEFIFORMULA/"+address_defi +"/"+protocols_defi+"/"+KEYID;
   
   
-  //Setting the values in the range defined at the beginning of the script
-  return ImportJSONAdvanced(private_path+url,http_options,'','noInherit,noTruncate,rawHeaders',includeXPath_,defaultTransform_);}
+   var res = await UrlFetchApp.fetch(private_path+url, http_options);
+   var content = res.getContentText();
+   var parsedJSON = JSON.parse(content);
+   
+   var data=[]
+   data.push(["NETWORK","PROTOCOL","ADDRESS","TYPE","SYMBOL","BALANCE","PRICE","BALANCE_USD"])
+  
+  for (var i=0;i<parsedJSON.length;i++) {
+        data.push([parsedJSON[i]["NETWORK"],parsedJSON[i]["PROTOCOL"],parsedJSON[i]["ADDRESS"],parsedJSON[i]["TYPE"],parsedJSON[i]["SYMBOL"],parsedJSON[i]["BALANCE"],parsedJSON[i]["PRICE"],parsedJSON[i]["BALANCE_USD"]]);
+        };
+  try{cache.put(id_cache,JSON.stringify(data),expirationInSeconds_);
+  return data; } 
+  catch(err){ 
+    return data;
+  }   
+  }
+
   catch(err){
     return err;
   }
