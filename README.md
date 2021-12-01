@@ -3,7 +3,7 @@ Google Script that returns list of all assets (tokens, pools, nft, claimable etc
 
 ######
 ## PUBLICATION LINKS
-###### [Link to the Medium Publication](https://medium.com/coinmonks/defi-crypto-portfolio-in-google-sheets-vaults-nfts-tokens-interest-647ebac65739)
+###### [DeFi crypto portfolio in Google Sheets -Vaults, NFTs, Tokens, Interest](https://medium.com/coinmonks/defi-crypto-portfolio-in-google-sheets-vaults-nfts-tokens-interest-647ebac65739)
 
 
 ### DIY:
