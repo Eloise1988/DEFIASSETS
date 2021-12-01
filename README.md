@@ -1,6 +1,11 @@
 # DEFIASSETS
 Google Script that returns list of all assets (tokens, pools, nft, claimable etc...)
 
+######
+## PUBLICATION LINKS
+###### [Link to the Medium Publication](https://medium.com/coinmonks/defi-crypto-portfolio-in-google-sheets-vaults-nfts-tokens-interest-647ebac65739)
+
+
 ### DIY:
 - 1) Add up to 3 ERC, BEP20, MATIC addresses
 - 2) Add specific protocols if needed
