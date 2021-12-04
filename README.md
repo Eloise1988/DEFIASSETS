@@ -1,7 +1,6 @@
 # DEFIASSETS
 Google Script that returns list of all assets (tokens, pools, nft, claimable etc...)
-# <img src="https://github.com/Eloise1988/DEFIASSETS/blob/main/GIF/zapperlogo.jpeg" width="50" height="50" />
-![ETHERSCAN](https://github.com/Eloise1988/DEFIASSETS/blob/main/GIF/etherscanlogo.jpeg) ![BSCSCAN](https://github.com/Eloise1988/DEFIASSETS/blob/main/GIF/bscscanlogo.jpeg) ![POLYGONSCAN](https://github.com/Eloise1988/DEFIASSETS/blob/main/GIF/polygonscanlogo.jpeg)
+# <img src="https://github.com/Eloise1988/DEFIASSETS/blob/main/GIF/zapperlogo.jpeg" width="50" height="50" /> <img src="https://github.com/Eloise1988/DEFIASSETS/blob/main/GIF/etherscanlogo.jpeg" width="50" height="50" /> <img src="https://github.com/Eloise1988/DEFIASSETS/blob/main/GIF/bscscanlogo.jpeg" width="50" height="50" /> <img src="https://github.com/Eloise1988/DEFIASSETS/blob/main/GIF/pollygonscanlogo.svg" width="50" height="50" />
 
 ######
 ## PUBLICATION LINKS
